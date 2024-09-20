@@ -3,16 +3,16 @@ import 'listapastor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'contato.dart';
 import 'login.dart';
-import 'oracao.dart';
+import 'home.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class OracaoPage extends StatefulWidget {
+  const OracaoPage({super.key});
 
   @override
-  HomePageState createState() => HomePageState();
+  OracaoPageState createState() => OracaoPageState();
 }
 
-class HomePageState extends State<HomePage> {
+class OracaoPageState extends State<OracaoPage> {
   Future<void> _logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
@@ -25,8 +25,8 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(     
-        title: const Text('Galeria dos Pastores'),
+      appBar: AppBar(       
+        title: const Text('Oração dos Pastores'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
@@ -34,10 +34,10 @@ class HomePageState extends State<HomePage> {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const HomePage()),
                 );
-                } else if (value == 'oracao') {
+              } else if (value == 'oracao') {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const OracaoPage()),
-                );
+                );  
               } else if (value == 'pastores') {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const PastorListPage()),
@@ -88,11 +88,11 @@ class HomePageState extends State<HomePage> {
   child: Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      const Text('Ordem dos Pastores', style: TextStyle(fontSize: 30,),),
+      const Text('Oração dos Pastores', style: TextStyle(fontSize: 30,),),
       Image.asset(
         'assets/images/Pastor.png', 
-        width: 120, 
-        height: 120,
+        width: 100, 
+        height: 100,
       ),  // Imagem
       const SizedBox(height: 10),
       RichText(
@@ -102,7 +102,13 @@ class HomePageState extends State<HomePage> {
             TextSpan(
               text: "-------", // Adiciona o recuo
             ),
-            TextSpan(text: '"De acordo com a tradição, espera-se que o detentor deste título seja adestrado, amigo, legal, vigilante e se necessário ... agressivo."',
+            TextSpan(text: '"LIBERTEMO-NOS DAS CORRENTES QUE NOS LIGAM A UMA VIDA POUCO EFICIENTE,\n CAMINHEMOS EM DIREÇÃO AO SABER E AO FAZER,\n PREPAREMOS NOSSOS CORPOS PARA DUROS COMBATES E TENHAMOS NOSSAS MENTES ABERTAS PARA ACEITAR ESTA FILOSOFIA DE PROCEDER,',
+        style: TextStyle(fontSize: 16, color: Colors.black),
+            ),
+            TextSpan(
+              text: "\n-------", // Adiciona o recuo
+            ),
+            TextSpan(text: 'A FIM DE QUE POSSAMOS, ORGULHOSAMENTE, PERTENCER AO CANIL DOS PASTORES ...   PASTOR!!!"',
         style: TextStyle(fontSize: 18, color: Colors.black),
             ),
             ],

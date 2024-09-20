@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:developer'; // Importando o pacote de logging
 import 'login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'oracao.dart';
 import 'home.dart';
 import 'listapastor.dart';
 
@@ -42,14 +43,10 @@ class FaleComigoPageState extends State<FaleComigoPage> {
   };
 
   try {
-    // final prefs = await SharedPreferences.getInstance();
-    // final token = prefs.getString('token'); // Carregar o token do localStorage
-
-    final response = await http.post(
+      final response = await http.post(
       Uri.parse('https://galeria-dos-pastores-production.up.railway.app/falecomigo'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        // if (token != null) 'Authorization': 'Bearer $token', // Enviar token se existir
       },
       body: jsonEncode(falaComigo),
     );
@@ -83,14 +80,18 @@ class FaleComigoPageState extends State<FaleComigoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Fale Conosco'),
+       appBar: AppBar(     
+        title: const Text('Fala Comigo!'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'home') {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+                } else if (value == 'oracao') {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const OracaoPage()),
                 );
               } else if (value == 'pastores') {
                 Navigator.of(context).pushReplacement(
@@ -114,6 +115,10 @@ class FaleComigoPageState extends State<FaleComigoPage> {
                 child: Text('Home'),
               ),
               const PopupMenuItem(
+                value: 'oracao',
+                child: Text('Oração dos Pastores'),
+              ),
+              const PopupMenuItem(
                 value: 'pastores',
                 child: Text('Pastores'),
               ),
@@ -123,7 +128,7 @@ class FaleComigoPageState extends State<FaleComigoPage> {
               ),
               const PopupMenuItem(
                 value: 'falecomigo',
-                child: Text('Fale Conosco'),
+                child: Text('Fala Comigo'),
               ),
               const PopupMenuItem(
                 value: 'sair',

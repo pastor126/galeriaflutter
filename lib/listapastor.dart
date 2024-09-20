@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'home.dart';
+import 'oracao.dart';
 import 'contato.dart';
+import 'home.dart';
 
 
 
@@ -81,17 +82,24 @@ class PastorListPageState extends State<PastorListPage> {
     }).toList();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+    final data = widget.isHonorario ? 'Pastores Honorários': 'Pastores';
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.isHonorario ? 'Pastores Honorários' : 'Pastores'),
+           appBar: AppBar(     
+        title:  Text(data),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'home') {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+                } else if (value == 'oracao') {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const OracaoPage()),
                 );
               } else if (value == 'pastores') {
                 Navigator.of(context).pushReplacement(
@@ -113,6 +121,10 @@ class PastorListPageState extends State<PastorListPage> {
               const PopupMenuItem(
                 value: 'home',
                 child: Text('Home'),
+              ),
+              const PopupMenuItem(
+                value: 'oracao',
+                child: Text('Oração dos Pastores'),
               ),
               const PopupMenuItem(
                 value: 'pastores',

@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Galeria Flutter',
+      title: 'Galeria dos Pastores',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         elevatedButtonTheme: ElevatedButtonThemeData(
