@@ -5,6 +5,7 @@ import 'package:galeriaflutter/home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'novousuario.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -86,10 +87,22 @@ if (!mounted) return;
           decoration: const InputDecoration(labelText: 'Senha'),
           obscureText: true,
         ),
+        const SizedBox(height: 20),
+        // Botão para efetivar o login.
         ElevatedButton(
           onPressed: login,
           child: const Text('Entrar'),
         ),
+        const SizedBox(height: 20),
+            // Adiciona um link para a página de cadastro
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const RegisterPage()), // Direciona para a página de cadastro
+                );
+              },
+              child: const Text('Criar novo usuário', style: TextStyle(color: Colors.blue, fontSize: 16)),
+            ),
       ],
     ),
   ),
