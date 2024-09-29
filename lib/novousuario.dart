@@ -7,6 +7,7 @@ class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _RegisterPageState createState() => _RegisterPageState();
 }
 
@@ -36,6 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       if (response.statusCode == 200) {
         // Exibe mensagem de sucesso e redireciona para login
+      if (!mounted) return; // Verifica se o widget ainda está montado
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Verifique sua caixa de e-mail para validar o cadastro.'),
@@ -47,10 +49,12 @@ class _RegisterPageState extends State<RegisterPage> {
         await Future.delayed(const Duration(seconds: 3));
 
         // Redireciona para a página de login
+        if (!mounted) return; // Verifica se o widget ainda está montado
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const LoginPage()),
         );
       } else {
+        if (!mounted) return; // Verifica se o widget ainda está montado
         // Se houver erro, exibe uma mensagem
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

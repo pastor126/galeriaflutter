@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:developer'; // Importando o pacote de logging
-import 'login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'oracao.dart';
-import 'home.dart';
-import 'listapastor.dart';
+import 'dart:developer';
+import 'appbar1.dart';
 
 class FaleComigoPage extends StatefulWidget {
-  const FaleComigoPage({super.key});
+  final String title;
+  const FaleComigoPage({super.key, required this.title});
 
   @override
   FaleComigoPageState createState() => FaleComigoPageState();
@@ -80,64 +77,7 @@ class FaleComigoPageState extends State<FaleComigoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(     
-        title: const Text('Fala Comigo!'),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'home') {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
-                } else if (value == 'oracao') {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const OracaoPage()),
-                );
-              } else if (value == 'pastores') {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const PastorListPage()),
-                );
-              } else if (value == 'pastoresHonorarios') {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const PastorListPage(isHonorario: true)),
-                );
-              } else if (value == 'falecomigo') {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const FaleComigoPage()),
-                );
-              } else if (value == 'sair') {
-                _logout();
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'home',
-                child: Text('Home'),
-              ),
-              const PopupMenuItem(
-                value: 'oracao',
-                child: Text('Oração dos Pastores'),
-              ),
-              const PopupMenuItem(
-                value: 'pastores',
-                child: Text('Pastores'),
-              ),
-              const PopupMenuItem(
-                value: 'pastoresHonorarios',
-                child: Text('Pastores Honorários'),
-              ),
-              const PopupMenuItem(
-                value: 'falecomigo',
-                child: Text('Fala Comigo'),
-              ),
-              const PopupMenuItem(
-                value: 'sair',
-                child: Text('Sair'),
-              ),
-            ],
-          ),
-        ],
-      ),
+      appBar: const AppbarConfig(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -154,9 +94,10 @@ class FaleComigoPageState extends State<FaleComigoPage> {
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
+            const SizedBox(height: 15),
+            const Text('Mensagem'), 
             TextField(
               controller: _mensagemController,
-              decoration: const InputDecoration(labelText: 'Mensagem'),
               maxLines: 5,
             ),
             const SizedBox(height: 20),
@@ -170,12 +111,4 @@ class FaleComigoPageState extends State<FaleComigoPage> {
     );
   }
 
-  Future<void> _logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    if (!mounted) return;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
-  }
 }

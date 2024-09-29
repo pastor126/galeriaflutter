@@ -1,13 +1,10 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:galeriaflutter/home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'novousuario.dart';
-
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -23,9 +20,7 @@ class LoginPageState extends State<LoginPage> {
   try {
     final response = await http.post(
       Uri.parse('https://galeria-dos-pastores-production.up.railway.app/auth/login'),
-      headers: {
-    'Content-Type': 'application/json; charset=UTF-8',
-  },
+      headers: {'Content-Type': 'application/json; charset=UTF-8',},
   body: jsonEncode({
     'username': usernameController.text,
     'password': passwordController.text,
@@ -40,7 +35,7 @@ if (!mounted) return;
 
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const HomePage(title: 'Galeria dos Pastores')),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -54,7 +49,6 @@ if (!mounted) return;
     );
   }
 }
-
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +101,5 @@ if (!mounted) return;
     ),
   ),
 );
-
   }
 }

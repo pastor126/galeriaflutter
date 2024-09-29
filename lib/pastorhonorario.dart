@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 
 class PastorHonorarioPage extends StatelessWidget {
-  const PastorHonorarioPage({super.key});
+  final String title;
+  const PastorHonorarioPage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return const PastorListPage(isHonorario: true);
+    return const PastorListPage(isHonorario: true, title: 'Pastores Honorários');
   }
 }
