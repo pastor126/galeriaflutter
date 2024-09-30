@@ -13,14 +13,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Galeria dos Pastores',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white, backgroundColor: Colors.blue, // Define a cor do texto dos ElevatedButtons
+            foregroundColor: Colors.white, backgroundColor: Colors.orange, // Define a cor do texto dos ElevatedButtons
           ),
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.blue, // Definindo cor de fundo do AppBar
+          backgroundColor: Colors.orange, // Definindo cor de fundo do AppBar
           titleTextStyle: TextStyle(
             color: Colors.white,
             fontSize: 20,

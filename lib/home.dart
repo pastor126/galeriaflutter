@@ -20,13 +20,13 @@ class HomePageState extends State<HomePage> {
   child: Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      const Text('Ordem dos Pastores', style: TextStyle(fontSize: 30,),),
+      const Text('Ordem dos Pastores', style: TextStyle(fontSize: 25,),),
       Image.asset(
         'assets/images/Pastor.png', 
         width: 120, 
         height: 120,
       ),  // Imagem
-      const SizedBox(height: 10),
+      
       RichText(
         textAlign: TextAlign.justify,
            text: const TextSpan(
@@ -36,6 +36,23 @@ class HomePageState extends State<HomePage> {
             ),
             TextSpan(text: '"De acordo com a tradição, espera-se que o detentor deste título seja adestrado, amigo, legal, vigilante e se necessário ... agressivo."',
         style: TextStyle(fontSize: 18, color: Colors.black),
+            ),
+            ],
+      ),
+      ),
+      const SizedBox(height:10,),
+        RichText(
+        textAlign: TextAlign.justify,
+           text: const TextSpan(
+            children: [
+              TextSpan(
+              text: '____________',
+            ),
+            TextSpan(
+              text: 'AVISOS \n', style: TextStyle(fontSize: 18, color: Colors.red),
+            ),
+            TextSpan(text: 'Aqui poderá encontrar avisos referente à Ordem.',
+        style: TextStyle(fontSize: 15, color: Colors.black),
             ),
             ],
       ),

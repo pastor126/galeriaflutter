@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:galeriaflutter/login.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:developer'; 
 import 'appbar1.dart';
@@ -14,7 +16,6 @@ class ConfigPage extends StatefulWidget {
 
 
 class ConfigPageState extends State<ConfigPage> {
-  final _senhaController = TextEditingController();
   final _senha1Controller = TextEditingController();
   final _senha2Controller = TextEditingController();
  
@@ -34,20 +35,30 @@ Future<void> _alteraMensagem() async {
   }
 
   final config = {
-    'senha': _senhaController.text,
-    'senha1': _senha1Controller.text,
-    'senha2': _senha2Controller.text,
+    'sen1': _senha1Controller.text,
+    'sen2': _senha2Controller.text,
   };
+   final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('token');
+
+    if (token == null) {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+      return;
+    }
 
   try {
-      final response = await http.post(
-      Uri.parse('https://galeria-dos-pastores-production.up.railway.app/atual'),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(config),
-    );
-
+    final response = await http.post(
+    // Uri.parse('https://galeria-dos-pastores-production.up.railway.app/atual'),
+    Uri.parse('http://192.168.1.74:8089/atual'),
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json', 
+    },
+    body: jsonEncode(config),
+  );
     if (!mounted) return;
 
     if (response.statusCode == 200) {
@@ -79,21 +90,19 @@ Future<void> _alteraMensagem() async {
     return Scaffold(
       appBar: const AppbarConfig(),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
             const Text('Atualize sua senha.'),
             TextField(
-              controller: _senhaController,
-              decoration: const InputDecoration(labelText: 'Senha Atual'),
-            ),
-            TextField(
               controller: _senha1Controller,
               decoration: const InputDecoration(labelText: 'Nova Senha'),
+              obscureText: true,
             ),
             TextField(
               controller: _senha2Controller,
               decoration: const InputDecoration(labelText: 'Confirme a Senha'),
+              obscureText: true,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
