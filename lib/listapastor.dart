@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'appbar1.dart';
 
+
 class PastorListPage extends StatefulWidget {
   final bool isHonorario;
   final String title;
@@ -19,6 +20,7 @@ class PastorListPageState extends State<PastorListPage> {
   List<Pastor> pastores = [];
   String searchQuery = '';
 
+ 
   @override
   void initState() {
     super.initState();

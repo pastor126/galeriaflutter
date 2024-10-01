@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:developer'; 
 import 'appbar1.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'dart:io';
 
 class ConfigPage extends StatefulWidget {
   final String title;
@@ -19,6 +21,51 @@ class ConfigPageState extends State<ConfigPage> {
   final _senha1Controller = TextEditingController();
   final _senha2Controller = TextEditingController();
  
+ //Banner google
+  BannerAd? _anchoredAdaptiveAd; // Banner que será exibido
+  bool _isLoaded = false; // Verifica banner foi carregado
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadAd(); // Carrega o banner ao carregar a página
+  }
+
+
+   Future<void> _loadAd() async {
+    // Obtém o tamanho do banner com base na largura da tela
+    final AnchoredAdaptiveBannerAdSize? size =
+ await     AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+            MediaQuery.of(context).size.width.truncate());
+
+
+    if (size == null) {return;}
+
+
+    //ID de teste (substitua pelo seu ao usar em produção)
+    _anchoredAdaptiveAd = BannerAd(
+      adUnitId: Platform.isAndroid
+          ? 'ca-app-pub-3940256099942544/6300978111'
+          : 'ca-app-pub-3940256099942544/2934735716',
+      size: size,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          setState(() {
+            _anchoredAdaptiveAd = ad as BannerAd;
+            _isLoaded = true; 
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          ad.dispose();
+        },
+      ),
+    );
+    // Carrega o banner
+    return _anchoredAdaptiveAd!.load();
+  }
+
 
 Future<void> _alteraMensagem() async {
   // Validação dos campos
@@ -51,8 +98,8 @@ Future<void> _alteraMensagem() async {
 
   try {
     final response = await http.post(
-    // Uri.parse('https://galeria-dos-pastores-production.up.railway.app/atual'),
-    Uri.parse('http://192.168.1.74:8089/atual'),
+    Uri.parse('https://galeria-dos-pastores-production.up.railway.app/atual'),
+    // Uri.parse('http://192.168.1.74:8089/atual'),
     headers: {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json', 
@@ -109,6 +156,14 @@ Future<void> _alteraMensagem() async {
               onPressed: _alteraMensagem,
               child: const Text('Enviar'),
             ),
+                        const SizedBox(height: 70,),
+             if (_anchoredAdaptiveAd != null && _isLoaded)
+          Container(
+            color: Colors.green,
+            width: _anchoredAdaptiveAd!.size.width.toDouble(),
+            height: _anchoredAdaptiveAd!.size.height.toDouble(),
+            child: AdWidget(ad: _anchoredAdaptiveAd!),
+          ),
           ],
         ),
       ),

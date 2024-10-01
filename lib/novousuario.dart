@@ -46,7 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
         );
 
         // Aguarda 3 segundos e redireciona para a página de login
-        await Future.delayed(const Duration(seconds: 3));
+        await Future.delayed(const Duration(seconds: 6));
 
         // Redireciona para a página de login
         if (!mounted) return; // Verifica se o widget ainda está montado

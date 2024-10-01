@@ -7,6 +7,10 @@ import 'contato.dart';
 import 'login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// google
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'dart:io';
+
 // Cria um ValueNotifier para o título da AppBar
 ValueNotifier<String> appBarTitleNotifier = ValueNotifier<String>(''); 
 
@@ -19,6 +23,58 @@ abstract class Appbar1 extends StatefulWidget {
 }
 
 class _Appbar1State extends State<Appbar1> {
+ //Google Interstitial
+InterstitialAd? _interstitialAd;
+// replace this test ad unit with your own ad unit
+  final adUnitId = Platform.isAndroid
+    ? 'ca-app-pub-3940256099942544/1033173712'
+    : 'ca-app-pub-3940256099942544/4411468910';
+
+  /// Loads an interstitial ad.
+  void loadAd() {
+        InterstitialAd.load(
+        adUnitId: adUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          // Called when an ad is successfully received.
+          onAdLoaded: (ad) {
+             ad.fullScreenContentCallback = FullScreenContentCallback(
+                // Called when the ad showed the full screen content.
+                onAdShowedFullScreenContent: (ad) {},
+                // Called when an impression occurs on the ad.
+                onAdImpression: (ad) {},
+                // Called when the ad failed to show full screen content.
+                onAdFailedToShowFullScreenContent: (ad, err) {
+                  // Dispose the ad here to free resources.
+                  ad.dispose();
+                },
+                // Called when the ad dismissed full screen content.
+                onAdDismissedFullScreenContent: (ad) {
+                  // Dispose the ad here to free resources.
+                  ad.dispose();
+                },
+                // Called when a click is recorded for an ad.
+                onAdClicked: (ad) {});
+
+            debugPrint('$ad loaded.');
+            // Keep a reference to the ad so you can show it later.
+            _interstitialAd = ad;
+          },
+          // Called when an ad request failed.
+          onAdFailedToLoad: (LoadAdError error) {
+            debugPrint('InterstitialAd failed to load: $error');
+          },
+        ));
+  }
+
+@override
+void initState() {
+  super.initState();
+  loadAd(); // Carregar o anúncio ao inicializar a página
+}
+
+
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -58,18 +114,39 @@ class _Appbar1State extends State<Appbar1> {
         break;
       case 'oracao':
         novoTitulo = 'Vamos orar!';  
+          if (_interstitialAd != null) {
+        _interstitialAd!.show(); // Mostra o anúncio
+        _interstitialAd = null; // Limpa a referência para garantir que um novo seja carregado
+        loadAd(); // Recarrega um novo anúncio para a próxima vez
+      }
         break;
       case 'pastores':
         novoTitulo = 'Pastores';
         break;
       case 'pastoresHonorarios':
         novoTitulo = 'Pastores Honorários';
+        // Exibir o anúncio intersticial ao selecionar "Pastores"
+      if (_interstitialAd != null) {
+        _interstitialAd!.show(); // Mostra o anúncio
+        _interstitialAd = null; // Limpa a referência para garantir que um novo seja carregado
+        loadAd(); // Recarrega um novo anúncio para a próxima vez
+      }
         break;
       case 'falecomigo':
         novoTitulo = 'Fala Comigo';
+          if (_interstitialAd != null) {
+        _interstitialAd!.show(); // Mostra o anúncio
+        _interstitialAd = null; // Limpa a referência para garantir que um novo seja carregado
+        loadAd(); // Recarrega um novo anúncio para a próxima vez
+      }
         break;
       case 'atual':
         novoTitulo = 'Configuração';
+          if (_interstitialAd != null) {
+        _interstitialAd!.show(); // Mostra o anúncio
+        _interstitialAd = null; // Limpa a referência para garantir que um novo seja carregado
+        loadAd(); // Recarrega um novo anúncio para a próxima vez
+      }
         break;
       case 'sair':
         _logout(context);

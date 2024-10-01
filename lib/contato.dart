@@ -3,6 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:developer';
 import 'appbar1.dart';
+// google
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'dart:io';
 
 class FaleComigoPage extends StatefulWidget {
   final String title;
@@ -17,6 +20,56 @@ class FaleComigoPageState extends State<FaleComigoPage> {
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
   final _mensagemController = TextEditingController();
+
+   final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+
+  //Banner google
+  BannerAd? _anchoredAdaptiveAd; // Banner que será exibido
+  bool _isLoaded = false; // Verifica banner foi carregado
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadAd(); // Carrega o banner ao carregar a página
+  }
+
+
+   Future<void> _loadAd() async {
+    // Obtém o tamanho do banner com base na largura da tela
+    final AnchoredAdaptiveBannerAdSize? size =
+ await     AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+            MediaQuery.of(context).size.width.truncate());
+
+
+    if (size == null) {return;}
+
+
+    //ID de teste (substitua pelo seu ao usar em produção)
+    _anchoredAdaptiveAd = BannerAd(
+      adUnitId: Platform.isAndroid
+          ? 'ca-app-pub-3940256099942544/6300978111'
+          : 'ca-app-pub-3940256099942544/2934735716',
+      size: size,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          setState(() {
+            _anchoredAdaptiveAd = ad as BannerAd;
+            _isLoaded = true; 
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          ad.dispose();
+        },
+      ),
+    );
+    // Carrega o banner
+    return _anchoredAdaptiveAd!.load();
+  }
+
 
   Future<void> _enviarMensagem() async {
   // Validação dos campos
@@ -52,8 +105,10 @@ class FaleComigoPageState extends State<FaleComigoPage> {
 
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Mensagem enviada com sucesso!')),
+        const SnackBar(content: Text('Mensagem enviada com sucesso!'),
+         duration: Duration(seconds: 6),),
       );
+
     } else if (response.statusCode == 401){
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Erro de autenticação. Por favor, faça login novamente.')),
@@ -105,6 +160,14 @@ class FaleComigoPageState extends State<FaleComigoPage> {
               onPressed: _enviarMensagem,
               child: const Text('Enviar'),
             ),
+            const SizedBox(height: 15,),
+             if (_anchoredAdaptiveAd != null && _isLoaded)
+          Container(
+            color: Colors.green,
+            width: _anchoredAdaptiveAd!.size.width.toDouble(),
+            height: _anchoredAdaptiveAd!.size.height.toDouble(),
+            child: AdWidget(ad: _anchoredAdaptiveAd!),
+          ),
           ],
         ),
       ),
